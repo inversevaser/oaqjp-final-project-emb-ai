@@ -9,24 +9,11 @@ def emotion_detector(text_to_analyze):
     ret_resp = requests.post(url, json = obj, headers=header)
     format_resp = json.loads(ret_resp.text)
 
-    anger = format_resp["emotionPredictions"][0]["emotion"]["anger"]
-    disgust = format_resp["emotionPredictions"][0]["emotion"]["disgust"]
-    fear = format_resp["emotionPredictions"][0]["emotion"]["fear"]
-    joy = format_resp["emotionPredictions"][0]["emotion"]["joy"]
-    sadness = format_resp["emotionPredictions"][0]["emotion"]["sadness"]
-    dominant_emotion_num = max([anger,disgust,fear,joy,sadness])
+    emotions_dict = format_resp["emotionPredictions"][0]["emotion"]
 
-    if dominant_emotion_num == anger:
-        dominant_emotion = "anger"
-    elif dominant_emotion_num == disgust:
-        dominant_emotion = "disgust"
-    elif dominant_emotion_num == joy:
-        dominant_emotion = "joy"
-    elif dominant_emotion_num == fear:
-        dominant_emotion = "fear"
-    else:
-        dominant_emotion = "sadness"
+    dominant_emotion_num = max(emotions_dict.values())
 
-    return {'anger': anger, 'disgust': disgust, 'fear': fear, 'joy': joy,
-     'sadness': sadness, 'dominant_emotion': dominant_emotion}
-    # return format_resp
+    for key in list(emotions_dict.keys()):
+        if dominant_emotion_num == emotions_dict[key]:
+            emotions_dict["dominant_emotion"] = key
+    return emotions_dict

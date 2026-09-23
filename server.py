@@ -9,18 +9,14 @@ def index_page():
 
 @app.route("/emotionDetector", methods=['GET'])
 def emotionDetector():
-    text_analyzee = request.form.get("emotionPredictions")
+    text_analyzee = request.args.get("emotionPredictions")
 
-    analyzed_response = emotion_detector(text_analyzee)
+    response = emotion_detector(text_to_analyze)
 
-    final_response = "For the given statement, the system response is"
-    for index, emoting in enumerate(list(analyzed_response.items)):
-        if emoting[0] == "sadness":
-            final_response += f"and {emoting[0]}:{emoting[1]}. "
-        else:
-            final_response += f"{emoting[0]}:{emoting[1]}, "
-    final_response += "The dominant emotion is "
-    final_response += f"{analyzed_response['dominant_emotion']}"
+    final_response = "For the given statement, the system response is "
+    final_response += f"'anger': {response['anger']}, 'disgust': {response['disgust']}, "
+    final_response += f"'joy': {response['joy']} and 'sadness': {response['sadness']}. "
+    final_response += f"The dominant emotion is {response['dominant_emotion']}."
     return final_response
 
 if __name__ == "__main__":
