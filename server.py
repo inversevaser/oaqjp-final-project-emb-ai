@@ -7,9 +7,9 @@ def index_page():
     return render_template('index.html')
 
 
-@app.route("/emotionDetector")
+@app.route("/emotionDetector", methods=['GET'])
 def emotionDetector():
-    text_analyzee = request.args.get("emotionPredictions")
+    text_analyzee = request.form.get("emotionPredictions")
 
     analyzed_response = emotion_detector(text_analyzee)
 
